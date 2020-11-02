@@ -78,8 +78,10 @@ public class AccesoDatosImpl implements IAccesoDatos{
             var indice = 1;
             while(linea != null){
                 if(buscar != null && buscar.equalsIgnoreCase(linea)){
-                    resultado = "Pelicula " + linea + "encontrada en el indice " + indice;
+                    resultado = "Pelicula " + linea + " encontrada en el indice " + indice;
                     break;
+                }else{
+                    resultado = "Pelicula no encontrada!!";
                 }
                 linea = entrada.readLine();
                 indice++;
