@@ -17,8 +17,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modelo.Pelicula;
 
 /**
@@ -28,7 +26,7 @@ import modelo.Pelicula;
 public class AccesoDatosImpl implements IAccesoDatos{
 
     @Override
-    public boolean existe(String nombre) throws AccesoDatosEx {
+    public boolean existe(String nombre){
         File archivo = new File(nombre);
         return archivo.exists();        
     }
@@ -62,22 +60,57 @@ public class AccesoDatosImpl implements IAccesoDatos{
         try {
             var salida = new PrintWriter(new FileWriter(archivo,anexar));
             salida.println(pelicula.toString());
+            salida.close();
+            System.out.println("Se a escrito en el archivo");
         } catch (IOException ex) {
-            ex.printStackTrace();
             throw new EscrituraDatosEx("Excepcion al listar peliculas: " + ex.getMessage());
         }
     }
 
     @Override
-    public String buscar(String archivo, String buscar) throws LecturaDatosEx {
+    public String buscar(String nombre, String buscar) throws LecturaDatosEx {
+        var archivo = new File(nombre);
+        String resultado = null;
+        try {
+            var entrada = new BufferedReader(new FileReader(archivo));
+            String linea = null;
+            linea = entrada.readLine();
+            var indice = 1;
+            while(linea != null){
+                if(buscar != null && buscar.equalsIgnoreCase(linea)){
+                    resultado = "Pelicula " + linea + "encontrada en el indice " + indice;
+                    break;
+                }
+                linea = entrada.readLine();
+                indice++;
+            }
+            entrada.close();
+        } catch (FileNotFoundException ex) {
+            throw new LecturaDatosEx("Excepcion al buscar peliculas: " + ex.getMessage());
+        } catch (IOException ex) {
+            throw new LecturaDatosEx("Excepcion al bucar peliculas: " + ex.getMessage());
+        }
+        return resultado;
     }
 
     @Override
-    public void crear(String archivo) throws AccesoDatosEx {
+    public void crear(String nombre) throws AccesoDatosEx {
+        var archivo = new File(nombre);
+        try {
+            var salida = new PrintWriter(new FileWriter(archivo));
+            salida.close();
+            System.out.println("Se a creado el archivo");
+        } catch (IOException ex) {
+             throw new AccesoDatosEx("Excepcion al bucar peliculas: " + ex.getMessage());
+        }
     }
 
     @Override
-    public void borrar(String archivo) throws AccesoDatosEx {
+    public void borrar(String nombre){
+        var archivo = new File(nombre);
+        if(archivo.exists())
+            archivo.delete();
+        System.out.println("Se ha borrado el archivo");
     }
     
 }
