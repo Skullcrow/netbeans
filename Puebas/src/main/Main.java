@@ -5,6 +5,10 @@
  */
 package main;
 
+import acceso.IAccesoDatos;
+import acceso.ImplementacionMySql;
+import acceso.ImplementacionOracle;
+
 /**
  *
  * @author Skullcrow
@@ -12,7 +16,15 @@ package main;
 public class Main {
     
     public static void main(String[] args){
-        System.out.println("Hola");
+        IAccesoDatos datos;
+        
+        datos   = new ImplementacionMySql();
+        
+        datos.listar();
+        
+        datos = new ImplementacionOracle();
+        
+        datos.listar();
     }
     
 }
