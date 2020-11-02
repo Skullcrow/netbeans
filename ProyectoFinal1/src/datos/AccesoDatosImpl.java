@@ -12,7 +12,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -55,7 +57,15 @@ public class AccesoDatosImpl implements IAccesoDatos{
     }
 
     @Override
-    public void escribir(Pelicula pelicula, String archivo, boolean anexar) throws EscrituraDatosEx {
+    public void escribir(Pelicula pelicula, String nombre, boolean anexar) throws EscrituraDatosEx {
+        var archivo = new File(nombre);
+        try {
+            var salida = new PrintWriter(new FileWriter(archivo,anexar));
+            salida.println(pelicula.toString());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            throw new EscrituraDatosEx("Excepcion al listar peliculas: " + ex.getMessage());
+        }
     }
 
     @Override
